@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import GooeyNav from "@/components/GooeyNav";
 import Footer from "@/components/Footer";
 import MobileNav from "@/components/MobileNav";
+import ClickSpark from "@/components/ClickSpark";
 
 // Dynamically import heavy components with no SSR
 const LiquidEther = dynamic(() => import("@/components/LiquidEther"), {
@@ -15,11 +16,6 @@ const LiquidEther = dynamic(() => import("@/components/LiquidEther"), {
 });
 
 const GridScan = dynamic(() => import("@/components/GridScan").then(mod => ({ default: mod.GridScan })), {
-  ssr: false,
-  loading: () => null
-});
-
-const ClickSpark = dynamic(() => import("@/components/ClickSpark"), {
   ssr: false,
   loading: () => null
 });
@@ -93,13 +89,21 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
   const isHome = pathname === "/";
   const footerRef = useRef<HTMLDivElement>(null);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   // Determine active nav index
   const activeNavIndex = navItems.findIndex(item => item.href === pathname);
 
+  // Ensure component is fully mounted before rendering dynamic content
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Reset scroll position on route change
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Force a reflow to ensure layout is calculated correctly
+    document.body.offsetHeight;
   }, [pathname]);
 
   // Observe footer visibility for sidebar behavior
@@ -126,7 +130,7 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
       sparkCount={8}
       duration={400}
     >
-      <div className="relative min-h-screen bg-black font-sans overflow-x-hidden">
+      <div className="relative min-h-screen bg-black font-sans overflow-x-hidden overflow-y-auto">
         {/* Sticky Navigation - Hidden on mobile */}
         <header className="fixed top-0 left-0 right-0 z-50 hidden md:flex justify-center py-4 bg-black/50 backdrop-blur-md border-b border-white/5">
           <GooeyNav
@@ -144,16 +148,16 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
         {/* Memoized Background Effects */}
         <BackgroundEffects />
 
-        {/* Animated Profile Sidebar (for non-home pages) */}
+        {/* Animated Profile Sidebar (for non-home pages) - only render when mounted */}
         <FooterContext.Provider value={{ isFooterVisible }}>
-          <AnimatedProfileCard />
+          {isMounted && <AnimatedProfileCard />}
         </FooterContext.Provider>
 
         {/* Main Content with margin adjustment for sidebar */}
         <main
           className={`relative z-10 pb-24 md:pb-0 ${!isHome ? "md:ml-[320px]" : ""}`}
         >
-          <AnimatePresence mode="popLayout" initial={false}>
+          <AnimatePresence mode="sync" initial={false}>
             <motion.div
               key={pathname}
               initial={{ opacity: 0 }}

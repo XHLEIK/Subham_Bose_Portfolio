@@ -153,7 +153,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full" onClick={handleClick}>
+    <div className="relative w-full min-h-screen overflow-x-hidden" onClick={handleClick}>
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[9999]" />
       {children}
     </div>
