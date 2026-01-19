@@ -37,13 +37,16 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   onStackComplete
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [cardStates, setCardStates] = useState<CardState[]>([]);
+  const childArray = React.Children.toArray(children);
+  const cardCount = childArray.length;
+  
+  // Initialize with first card visible to prevent flash on mount
+  const [cardStates, setCardStates] = useState<CardState[]>(() => 
+    childArray.map((_, i) => ({ progress: i === 0 ? 1 : 0, isActive: i === 0 }))
+  );
   const [isComplete, setIsComplete] = useState(false);
   const rafRef = useRef<number | null>(null);
   const lastScrollRef = useRef<number>(-1);
-  
-  const childArray = React.Children.toArray(children);
-  const cardCount = childArray.length;
   
   // Scroll distance per card animation
   const scrollPerCard = 300;
@@ -112,8 +115,18 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const getCardStyle = (index: number): React.CSSProperties => {
     const state = cardStates[index];
     
-    // Initial state - card not yet visible
+    // Initial state - first card should always be visible, others hidden
     if (!state || state.progress === 0) {
+      // Show first card by default if no state yet
+      if (index === 0 && (!cardStates.length || cardStates.every(s => s.progress === 0))) {
+        return {
+          opacity: 1,
+          transform: 'translateY(0px) scale(1)',
+          zIndex: cardCount - index,
+          pointerEvents: 'auto',
+          visibility: 'visible'
+        };
+      }
       return {
         opacity: 0,
         transform: 'translateY(60px) scale(0.98)',

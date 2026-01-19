@@ -151,6 +151,12 @@ const itemVariants = {
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure component is mounted before rendering dynamic content
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") return projects;
@@ -158,6 +164,24 @@ export default function ProjectsPage() {
     if (activeFilter === "group") return projects.filter(p => p.type === "group");
     return projects.filter(p => p.categories.includes(activeFilter as ProjectCategory));
   }, [activeFilter]);
+
+  // Show loading state until mounted to prevent hydration issues
+  if (!mounted) {
+    return (
+      <div className="min-h-screen pt-20 px-4 sm:px-6 lg:px-12 pb-24 overflow-x-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+              Projects & Case Studies
+            </h1>
+            <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
+              Real-world systems I&apos;ve built and improved
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-20 px-4 sm:px-6 lg:px-12 pb-24 overflow-x-hidden">
