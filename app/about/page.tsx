@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaFacebook, FaEnvelope, FaCode, FaServer, FaPython, FaRocket, FaGraduationCap, FaBriefcase, FaMapMarkerAlt, FaCalendarAlt, FaExternalLinkAlt, FaLightbulb, FaComments, FaUsers, FaCheckCircle, FaDownload, FaArrowRight } from "react-icons/fa";
 import { SiJavascript, SiTypescript, SiReact, SiNodedotjs, SiMongodb, SiExpress } from "react-icons/si";
 import FlowingMenu from "@/components/FlowingMenu";
-import ScrollStack, { ScrollStackItem } from "@/components/ScrollStack";
 import PixelCard from "@/components/PixelCard";
 import GlassSurface from "@/components/GlassSurface";
 
@@ -362,26 +361,27 @@ export default function AboutPage() {
           </motion.div>
 
           {/* Education Section */}
-          <div className="mb-12">
-            <ScrollStack
-              cardHeight={220}
-              title={
-                <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
-                  <FaGraduationCap className="text-purple-400" />
-                  Education
-                </h2>
-              }
-            >
+          <motion.div variants={itemVariants} className="mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 flex items-center gap-3">
+              <FaGraduationCap className="text-purple-400" />
+              Education
+            </h2>
+            
+            <div className="flex flex-col gap-6">
               {educationData.map((edu, index) => (
-                <ScrollStackItem
+                <motion.div
                   key={index}
-                  itemClassName={`bg-gradient-to-br ${
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className={`p-6 md:p-8 rounded-2xl md:rounded-3xl bg-gradient-to-br ${
                     edu.isCurrent 
                       ? 'from-purple-900/50 to-pink-900/50 border-2 border-purple-500/60' 
                       : 'from-zinc-900/80 to-zinc-800/80 border border-white/15'
-                  } backdrop-blur-md h-full`}
+                  } backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]`}
                 >
-                  <div className="flex flex-col h-full justify-center">
+                  <div className="flex flex-col">
                     {/* Year Badge */}
                     <div className="flex items-center gap-3 mb-3">
                       <span className={`px-4 py-1.5 rounded-full text-sm font-bold ${
@@ -431,10 +431,10 @@ export default function AboutPage() {
                       </span>
                     </div>
                   </div>
-                </ScrollStackItem>
+                </motion.div>
               ))}
-            </ScrollStack>
-          </div>
+            </div>
+          </motion.div>
 
           {/* Work Experience Section */}
           <motion.div variants={itemVariants} className="mb-16">
