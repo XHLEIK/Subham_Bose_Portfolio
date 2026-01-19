@@ -359,16 +359,19 @@ const LanyardSidebar: React.FC<LanyardSidebarProps> = ({ className = "" }) => {
   return (
     <motion.aside
       ref={containerRef}
-      initial={{ x: -350, opacity: 0 }}
+      initial={{ opacity: 0 }}
       animate={{ 
         x: isFooterVisible ? -350 : 0, 
         opacity: isFooterVisible ? 0 : 1 
       }}
-      exit={{ x: -350, opacity: 0 }}
+      exit={{ opacity: 0 }}
       transition={{
-        type: "spring",
-        stiffness: 70,
-        damping: 18,
+        opacity: { duration: 0.2 },
+        x: {
+          type: "spring",
+          stiffness: 70,
+          damping: 18,
+        }
       }}
       className={`fixed left-0 top-0 h-screen w-[320px] z-40 pt-16 px-4 hidden md:flex flex-col items-center ${className}`}
     >

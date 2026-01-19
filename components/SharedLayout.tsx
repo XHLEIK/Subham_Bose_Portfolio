@@ -1,9 +1,8 @@
 "use client";
 
-import React, { createContext, useState, useEffect, useRef, Suspense, memo } from "react";
+import React, { createContext, useState, useEffect, useRef, memo } from "react";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
-import { AnimatePresence, motion } from "framer-motion";
 import GooeyNav from "@/components/GooeyNav";
 import Footer from "@/components/Footer";
 import MobileNav from "@/components/MobileNav";
@@ -145,17 +144,7 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
         <main
           className={`relative z-10 pb-24 md:pb-0 ${!isHome ? "md:ml-[320px]" : ""}`}
         >
-          <AnimatePresence mode="sync" initial={false}>
-            <motion.div
-              key={pathname}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
+          {children}
         </main>
 
         {/* Footer - Full width, above sidebar */}
