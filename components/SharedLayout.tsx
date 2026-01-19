@@ -97,6 +97,11 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
   // Determine active nav index
   const activeNavIndex = navItems.findIndex(item => item.href === pathname);
 
+  // Reset scroll position on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   // Observe footer visibility for sidebar behavior
   useEffect(() => {
     const footer = footerRef.current;
@@ -121,7 +126,7 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
       sparkCount={8}
       duration={400}
     >
-      <div className="relative min-h-screen bg-black font-sans">
+      <div className="relative min-h-screen bg-black font-sans overflow-x-hidden">
         {/* Sticky Navigation - Hidden on mobile */}
         <header className="fixed top-0 left-0 right-0 z-50 hidden md:flex justify-center py-4 bg-black/50 backdrop-blur-md border-b border-white/5">
           <GooeyNav
