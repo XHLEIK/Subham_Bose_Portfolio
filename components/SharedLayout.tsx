@@ -8,19 +8,15 @@ import GooeyNav from "@/components/GooeyNav";
 import Footer from "@/components/Footer";
 import MobileNav from "@/components/MobileNav";
 import ClickSpark from "@/components/ClickSpark";
+import AnimatedProfileCard from "@/components/AnimatedProfileCard";
 
-// Dynamically import heavy components with no SSR
+// Dynamically import heavy background components with no SSR
 const LiquidEther = dynamic(() => import("@/components/LiquidEther"), {
   ssr: false,
   loading: () => <div className="fixed inset-0 bg-black" />
 });
 
 const GridScan = dynamic(() => import("@/components/GridScan").then(mod => ({ default: mod.GridScan })), {
-  ssr: false,
-  loading: () => null
-});
-
-const AnimatedProfileCard = dynamic(() => import("@/components/AnimatedProfileCard"), {
   ssr: false,
   loading: () => null
 });
@@ -89,21 +85,13 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
   const isHome = pathname === "/";
   const footerRef = useRef<HTMLDivElement>(null);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   
   // Determine active nav index
   const activeNavIndex = navItems.findIndex(item => item.href === pathname);
 
-  // Ensure component is fully mounted before rendering dynamic content
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   // Reset scroll position on route change
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Force a reflow to ensure layout is calculated correctly
-    document.body.offsetHeight;
   }, [pathname]);
 
   // Observe footer visibility for sidebar behavior
@@ -148,9 +136,9 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
         {/* Memoized Background Effects */}
         <BackgroundEffects />
 
-        {/* Animated Profile Sidebar (for non-home pages) - only render when mounted */}
+        {/* Animated Profile Sidebar (for non-home pages) */}
         <FooterContext.Provider value={{ isFooterVisible }}>
-          {isMounted && <AnimatedProfileCard />}
+          <AnimatedProfileCard />
         </FooterContext.Provider>
 
         {/* Main Content with margin adjustment for sidebar */}
