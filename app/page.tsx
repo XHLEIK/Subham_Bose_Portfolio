@@ -80,7 +80,7 @@ export default function Home() {
           stagger={0.03}
           textClassName="text-white font-bold"
         >
-          Welcome to my portfolio.
+          Welcome to my portfolio
         </ScrollFloat>
       </section>
       
