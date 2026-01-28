@@ -391,7 +391,7 @@ export default function BeyondCodePage() {
           </div>
           <div className="text-zinc-400 max-w-2xl">
             <BlurText
-              text="Stress relief, reflex training, and occasional rage therapy. Mobile or PC — if it's competitive, I'm in."
+              text="Stress relief, reflex training, and competitive matches — mobile or PC. My game IDs are below, send a friend request and let’s play."
               delay={50}
               animateBy="words"
               className="leading-relaxed"
@@ -481,7 +481,7 @@ export default function BeyondCodePage() {
           </div>
           <div className="text-zinc-400 max-w-2xl">
             <BlurText
-              text="I don't just compile code, I cook food too. Experiments happen. Some succeed. Some… don't get repeated."
+              text="I have a degree to cook in code, but I don’t need one to cook in the kitchen — here are some dishes I love to cook and eat."
               delay={50}
               animateBy="words"
               className="leading-relaxed"
