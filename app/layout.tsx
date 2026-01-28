@@ -34,7 +34,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <SharedLayout>{children}</SharedLayout>
-        <Analytics />
+        <Analytics debug={process.env.NODE_ENV === "development"} />
       </body>
     </html>
   );
