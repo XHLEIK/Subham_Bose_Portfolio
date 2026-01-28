@@ -113,7 +113,7 @@ export default function Home() {
               <TextType
                 text={["Aspiring Software Engineer with hands-on experience in"]}
                 typingSpeed={50}
-                pauseDuration={5000}
+                pauseDuration={3000}
                 showCursor
                 cursorCharacter="_"
                 cursorBlinkDuration={0.5}
