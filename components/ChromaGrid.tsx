@@ -17,6 +17,8 @@ export interface ChromaItem {
 export interface ChromaGridProps {
   items?: ChromaItem[];
   className?: string;
+  gridClassName?: string;
+  cardClassName?: string;
   radius?: number;
   damping?: number;
   fadeOut?: number;
@@ -28,6 +30,8 @@ type SetterFn = (v: number | string) => void;
 const ChromaGrid: React.FC<ChromaGridProps> = ({
   items,
   className = '',
+  gridClassName = '',
+  cardClassName = '',
   radius = 300,
   damping = 0.45,
   fadeOut = 0.6,
@@ -153,7 +157,7 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
       ref={rootRef}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
-      className={`relative w-full h-full flex flex-wrap justify-center items-start gap-3 ${className}`}
+      className={`relative w-full h-full ${gridClassName || 'flex flex-wrap justify-center items-start gap-3'} ${className}`}
       style={
         {
           '--r': `${radius}px`,
@@ -167,7 +171,7 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
           key={i}
           onMouseMove={handleCardMove}
           onClick={() => handleCardClick(c.url)}
-          className="group relative flex flex-col w-[300px] rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer"
+          className={`group relative flex flex-col rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer ${cardClassName || 'w-[300px]'}`}
           style={
             {
               '--card-border': c.borderColor || 'transparent',

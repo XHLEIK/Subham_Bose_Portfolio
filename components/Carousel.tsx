@@ -125,8 +125,27 @@ export default function Carousel({
   loop = false,
   round = false
 }: CarouselProps): JSX.Element {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(baseWidth);
   const containerPadding = 16;
-  const itemWidth = baseWidth - containerPadding * 2;
+  
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    const resizeObserver = new ResizeObserver(updateWidth);
+    resizeObserver.observe(containerRef.current);
+    
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  const itemWidth = containerWidth - containerPadding * 2;
   const trackItemOffset = itemWidth + GAP;
   const itemsForRender = useMemo(() => {
     if (!loop) return items;
@@ -140,7 +159,6 @@ export default function Carousel({
   const [isJumping, setIsJumping] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (pauseOnHover && containerRef.current) {
       const container = containerRef.current;
@@ -251,12 +269,12 @@ export default function Carousel({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden p-4 ${
+      className={`relative overflow-hidden p-4 w-full ${
         round ? 'rounded-full border border-white' : 'rounded-[24px] border border-[#222]'
       }`}
       style={{
-        width: `${baseWidth}px`,
-        ...(round && { height: `${baseWidth}px` })
+        maxWidth: `${baseWidth}px`,
+        ...(round && { height: `${containerWidth}px` })
       }}
     >
       <motion.div
@@ -290,7 +308,7 @@ export default function Carousel({
         ))}
       </motion.div>
       <div className={`flex w-full justify-center ${round ? 'absolute z-20 bottom-12 left-1/2 -translate-x-1/2' : ''}`}>
-        <div className="mt-4 flex w-[150px] justify-between px-8">
+        <div className="mt-4 flex w-full max-w-[150px] justify-between px-8">
           {items.map((_, index) => (
             <motion.div
               key={index}

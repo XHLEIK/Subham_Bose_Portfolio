@@ -29,135 +29,118 @@ const cookingDishes: CarouselItem[] = [
     title: "Fried Rice & Chilli Chicken",
     description: "Indo-Chinese combo of wok-tossed rice with crispy, spicy chicken chunks.",
     icon: <GiCookingPot className="h-4 w-4 text-white" />,
-    image: "/cooking/friedRice_Chillichicken.jpeg"
+    image: "/cooking/friedRice_Chillichicken.jpg"
   },
   {
     id: 3,
-    title: "Luchi & Aloodum",
-    description: "Fluffy deep-fried Bengali bread served with spiced potato curry. Pure comfort!",
+    title: "Chingri Machher Malaikari",
+    description: "Classic Bengali prawn curry cooked in a rich, creamy coconut milk gravy with aromatic spices.",
     icon: <GiCookingPot className="h-4 w-4 text-white" />,
-    image: "/cooking/luchi_aloo_dum.jpeg"
+    image: "/cooking/chigri macher malai kari.jpg"
   },
   {
     id: 4,
-    title: "Pav Bhaji",
-    description: "Spiced mashed vegetable curry with buttery toasted bread rolls. Mumbai street food classic!",
+    title: "Mutton Kosha",
+    description: "Slow-cooked, tender goat meat in a thick, dark, and spicy gravy. A Bengali celebration staple!",
     icon: <GiCookingPot className="h-4 w-4 text-white" />,
-    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80"
+    image: "/cooking/kasha.mangsho.jpg"
   },
   {
     id: 5,
-    title: "White Sauce Pasta",
-    description: "Creamy bechamel pasta with herbs, garlic & parmesan. Italian comfort in every bite!",
+    title: "Katla Machher Kaliya",
+    description: "Traditional Bengali fish curry made with Katla fish in a rich, spicy, and slightly sweet onion-ginger-garlic gravy.",
     icon: <GiCookingPot className="h-4 w-4 text-white" />,
-    image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&q=80"
+    image: "/cooking/katla-maccher-kaalia-1.jpg"
   }
 ];
 
-// Mobile Games data with images
+// Mobile Games data with images and IDs
 const mobileGames: ChromaItem[] = [
   {
     image: "/games/fcmobile.png",
     title: "FC Mobile",
-    subtitle: "⚽ Sports",
+    subtitle: "ID: 601506791866990592",
     borderColor: "#22c55e",
     gradient: "linear-gradient(145deg, #22c55e, #000)"
   },
   {
     image: "/games/coc.png",
     title: "Clash of Clans",
-    subtitle: "🏰 Strategy",
+    subtitle: "ID: #QCCJ9J28L",
     borderColor: "#f59e0b",
     gradient: "linear-gradient(145deg, #f59e0b, #000)"
   },
   {
-    image: "/games/bgmi.jpg",
-    title: "BGMI",
-    subtitle: "🔫 Battle Royale",
-    borderColor: "#ef4444",
-    gradient: "linear-gradient(145deg, #ef4444, #000)"
-  },
-  {
-    image: "/games/efootball.jpg",
-    title: "eFootball",
-    subtitle: "⚽ Sports",
-    borderColor: "#3b82f6",
-    gradient: "linear-gradient(145deg, #3b82f6, #000)"
-  },
-  {
     image: "/games/codm.jpg",
     title: "COD Mobile",
-    subtitle: "🎯 FPS",
+    subtitle: "ID: 6983767693468368897",
     borderColor: "#6366f1",
     gradient: "linear-gradient(145deg, #6366f1, #000)"
+  },
+  {
+    image: "/games/bgmi.jpg",
+    title: "BGMI",
+    subtitle: "ID: 51324081415",
+    borderColor: "#ef4444",
+    gradient: "linear-gradient(145deg, #ef4444, #000)"
   }
 ];
 
-// PC Games data with images
+// PC Games data with images and IDs
 const pcGames: ChromaItem[] = [
   {
     image: "/games/valorant.jpg",
     title: "Valorant",
-    subtitle: "🎯 Tactical FPS",
+    subtitle: "ID: Coming Soon",
     borderColor: "#ef4444",
     gradient: "linear-gradient(145deg, #ef4444, #000)"
   },
   {
-    image: "/games/Grand_Theft_Auto_V.png",
-    title: "GTA V",
-    subtitle: "🚗 Open World",
+    image: "/games/call-of-duty-warzone.jpg",
+    title: "Call of Duty Warzone",
+    subtitle: "ID: Coming Soon",
     borderColor: "#22c55e",
     gradient: "linear-gradient(145deg, #22c55e, #000)"
   },
   {
     image: "/games/CS2_Cover_Art.jpg",
     title: "Counter Strike 2",
-    subtitle: "🔫 Competitive FPS",
+    subtitle: "ID: Coming Soon",
     borderColor: "#f59e0b",
     gradient: "linear-gradient(145deg, #f59e0b, #000)"
   },
   {
-    image: "/games/CoD_Black_Ops_cover.png",
-    title: "Call of Duty: Black Ops",
-    subtitle: "💥 FPS",
-    borderColor: "#f97316",
-    gradient: "linear-gradient(145deg, #f97316, #000)"
-  },
-  {
-    image: "/games/halo.jpg",
-    title: "Halo Infinite",
-    subtitle: "🚀 Sci-Fi FPS",
+    image: "/games/Grand_Theft_Auto_V.png",
+    title: "GTA V",
+    subtitle: "ID: Coming Soon",
     borderColor: "#06b6d4",
     gradient: "linear-gradient(145deg, #06b6d4, #000)"
   }
 ];
 
-// Favorite artists data - 15 artists in 3 rows of 5
-const artistsRow1 = [
+// Favorite artists data - 16 artists in 4 rows of 4
+const allArtists = [
+  // Row 1
   { name: "The Weeknd", image: "/artist/The Weekend.jpeg" },
   { name: "Eminem", image: "https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b" },
-  { name: "Pritam", image: "/artist/Pritam.jpg" },
-  { name: "KK", image: "/artist/kk.jpg" },
-  { name: "Kailash Kher", image: "/artist/kailash kher.jpg" },
-];
-
-const artistsRow2 = [
-  { name: "Rahat Fateh Ali Khan", image: "/artist/rahat fateh ali khan.jpeg" },
-  { name: "Yo Yo Honey Singh", image: "/artist/yoyo honey singh.jpeg" },
-  { name: "Arijit Singh", image: "https://i.scdn.co/image/ab6761610000e5eb0261696c5df3be99da6ed3f3" },
-  { name: "Rupam Islam", image: "/artist/rupam islam.jpeg" },
   { name: "Imagine Dragons", image: "https://i.scdn.co/image/ab6761610000e5eb920dc1f617550de8388f368e" },
-];
-
-const artistsRow3 = [
-  { name: "Badshah", image: "/artist/Badshah.jpeg" },
-  { name: "Atif Aslam", image: "/artist/Atif Aslam.jpg" },
   { name: "Ed Sheeran", image: "https://i.scdn.co/image/ab6761610000e5eb3bcef85e105dfc42399ef0ba" },
+  // Row 2
+  { name: "Badshah", image: "/artist/Badshah.jpeg" },
+  { name: "Yo Yo Honey Singh", image: "/artist/yoyo honey singh.jpeg" },
+  { name: "KR$NA", image: "/artist/Kr$na.jpg" },
+  { name: "Bali", image: "/artist/Bali.jpg" },
+  // Row 3
   { name: "Talwiinder", image: "/artist/Talwiinder.jpeg" },
   { name: "Faheem Abdullah", image: "/artist/Faheem Abdullah.jpg" },
+  { name: "Atif Aslam", image: "/artist/Atif Aslam.jpg" },
+  { name: "Mohit Chauhan", image: "/artist/Mohit Chauhan.jpeg" },
+  // Row 4
+  { name: "KK", image: "/artist/kk.jpg" },
+  { name: "Arijit Singh", image: "https://i.scdn.co/image/ab6761610000e5eb0261696c5df3be99da6ed3f3" },
+  { name: "Kailash Kher", image: "/artist/kailash kher.jpg" },
+  { name: "Rahat Fateh Ali Khan", image: "/artist/rahat fateh ali khan.jpeg" },
 ];
-
-const allArtists = [...artistsRow1, ...artistsRow2, ...artistsRow3];
 
 // Photography images from public/photography folder
 const photographyImages = [
@@ -339,12 +322,12 @@ export default function BeyondCodePage() {
           </div>
         </motion.div>
 
-        {/* 3 Rows of 5 Artists */}
+        {/* 4x4 Grid for Desktop, 2x8 for Mobile */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {allArtists.map((artist, index) => (
             <motion.div
@@ -429,13 +412,15 @@ export default function BeyondCodePage() {
               Mobile <span className="text-emerald-400">Games</span>
             </h3>
           </div>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="max-w-3xl mx-auto px-4">
             <ChromaGrid
               items={mobileGames}
               radius={250}
               damping={0.4}
               fadeOut={0.5}
               ease="power3.out"
+              gridClassName="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-items-center"
+              cardClassName="w-full max-w-[300px]"
             />
           </div>
         </motion.div>
@@ -452,13 +437,15 @@ export default function BeyondCodePage() {
               PC <span className="text-purple-400">Games</span>
             </h3>
           </div>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="max-w-3xl mx-auto px-4">
             <ChromaGrid
               items={pcGames}
               radius={250}
               damping={0.4}
               fadeOut={0.5}
               ease="power3.out"
+              gridClassName="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-items-center"
+              cardClassName="w-full max-w-[300px]"
             />
           </div>
         </motion.div>
@@ -470,15 +457,16 @@ export default function BeyondCodePage() {
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="text-left mb-12"
+          className="text-left mb-12 relative"
           ref={cookingContainerRef}
+          style={{ position: 'relative' }}
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center">
   <FaUtensils className="text-3xl text-orange-400" />
 </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold text-white relative" style={{ position: 'relative' }}>
+            <h2 className="text-3xl md:text-4xl font-bold text-white relative z-10" style={{ position: 'relative' }}>
               <VariableProximity
                 label="Cooking Corner"
                 className="text-3xl md:text-4xl font-bold text-orange-400"
@@ -505,17 +493,19 @@ export default function BeyondCodePage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex justify-center"
+          className="flex justify-center w-full"
         >
-          <Carousel
-            items={cookingDishes}
-            baseWidth={500}
-            autoplay={true}
-            autoplayDelay={4000}
-            pauseOnHover={true}
-            loop={true}
-            round={false}
-          />
+          <div className="w-full max-w-4xl">
+            <Carousel
+              items={cookingDishes}
+              baseWidth={700}
+              autoplay={true}
+              autoplayDelay={4000}
+              pauseOnHover={true}
+              loop={true}
+              round={false}
+            />
+          </div>
         </motion.div>
       </section>
     </div>
