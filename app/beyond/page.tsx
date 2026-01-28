@@ -206,9 +206,9 @@ export default function BeyondCodePage() {
               Code
             </span>
           </h1>
-          <p className="text-lg md:text-xl text-zinc-400 leading-relaxed max-w-2xl">
-            Life isn&apos;t just about writing code. Here&apos;s a glimpse into the things that 
-            inspire me, keep me creative, and make me who I am beyond the keyboard.
+          <p className="text-lg md:text-xl text-zinc-400 leading-relaxed max-w-2xl">Coding is what I do.
+Creativity is how I live.
+Here’s a small peek into the things that keep me inspired beyond the screen.
           </p>
         </motion.div>
       </section>
@@ -231,10 +231,8 @@ export default function BeyondCodePage() {
               <p className="text-zinc-500 text-sm">Capturing moments through my lens</p>
             </div>
           </div>
-          <p className="text-zinc-400 max-w-2xl leading-relaxed">
-            Photography is my way of seeing the world differently. Every frame tells a story, 
-            and I love capturing the beauty in everyday moments. Here are some of my favorite shots.
-          </p>
+          <p className="text-zinc-400 max-w-2xl leading-relaxed">I like freezing moments before they disappear.
+Mostly random streets, good light, and accidentally good shots.</p>
         </motion.div>
 
         {/* DomeGallery Container */}
@@ -296,10 +294,8 @@ export default function BeyondCodePage() {
               <p className="text-zinc-500 text-sm">The soundtrack to my coding sessions</p>
             </div>
           </div>
-          <p className="text-zinc-400 max-w-2xl leading-relaxed">
-            Music fuels my creativity and keeps me in the zone. From soulful Bollywood melodies 
-            to hard-hitting hip-hop beats, here are the artists I can&apos;t stop listening to.
-          </p>
+          <p className="text-zinc-400 max-w-2xl leading-relaxed">My debugging soundtrack.
+Bollywood when I’m emotional, hip-hop when the code refuses to work.</p>
         </motion.div>
 
         {/* 3 Rows of 5 Artists */}
@@ -353,10 +349,8 @@ export default function BeyondCodePage() {
             </h2>
             <FaGamepad className="text-3xl text-green-400" />
           </div>
-          <p className="text-zinc-400 max-w-2xl mx-auto">
-            Gaming is my go-to escape. Whether it&apos;s quick matches on mobile or intense 
-            sessions on PC, here are the games that keep me entertained.
-          </p>
+          <p className="text-zinc-400 max-w-2xl mx-auto">Stress relief, reflex training, and occasional rage therapy.
+Mobile or PC — if it’s competitive, I’m in.</p>
         </motion.div>
 
         {/* Mobile Games */}
@@ -422,10 +416,8 @@ export default function BeyondCodePage() {
             </h2>
             <GiCookingPot className="text-3xl text-orange-400" />
           </div>
-          <p className="text-zinc-400 max-w-2xl mx-auto">
-            When I&apos;m not coding, you&apos;ll find me in the kitchen experimenting with flavors. 
-            Here are some of my favorite dishes to cook!
-          </p>
+          <p className="text-zinc-400 max-w-2xl mx-auto">When I'm not coding, you'll find me in the kitchen experimenting with flavors.
+Some dishes turn out great. Some… don't get repeated.</p>
         </motion.div>
 
         <motion.div

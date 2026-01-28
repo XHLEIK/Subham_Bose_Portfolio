@@ -6,6 +6,9 @@ import ScrollFloat from "@/components/ScrollFloat";
 import ProfileCard from "@/components/ProfileCard";
 import LogoLoop from "@/components/LogoLoop";
 import GlassSurface from "@/components/GlassSurface";
+import TextType from "@/components/TextType";
+import RotatingText from "@/components/RotatingText";
+import ScrambledText from "@/components/ScrambledText";
 import { 
   SiReact, 
   SiNextdotjs, 
@@ -106,12 +109,32 @@ export default function Home() {
           
           {/* Bio Text */}
           <div className="flex flex-col gap-6 text-center lg:text-left max-w-xl">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-               Aspiring Software Engineer with hands-on experience in  <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent"></span>
-            </h2>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-               Web, Backend  <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent"> & System Design</span>
-            </h2>
+            <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              <TextType
+                text={["Aspiring Software Engineer with hands-on experience in"]}
+                typingSpeed={50}
+                pauseDuration={5000}
+                showCursor
+                cursorCharacter="_"
+                cursorBlinkDuration={0.5}
+                loop={false}
+                className="inline"
+              />
+            </div>
+            <div className="flex flex-wrap items-center gap-2 text-3xl md:text-4xl lg:text-5xl font-bold">
+              <RotatingText
+                texts={['Web Development', 'Backend Systems', 'System Design', 'MERN Stack']}
+                mainClassName="px-3 md:px-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white overflow-hidden py-1 md:py-2 justify-center rounded-xl"
+                staggerFrom="last"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-120%" }}
+                staggerDuration={0.025}
+                splitLevelClassName="overflow-hidden pb-0.5 md:pb-1"
+                transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                rotationInterval={2500}
+              />
+            </div>
             <div className="flex flex-wrap gap-3 justify-center lg:justify-start mt-4">
               <GlassSurface 
                 width="auto" 
@@ -153,7 +176,15 @@ export default function Home() {
       {/* Tech Stack Logo Loop */}
       <section className="relative z-10 w-full py-16">
         <div className="max-w-6xl mx-auto px-6 mb-8">
-          <h2 className="text-center text-zinc-400 text-sm uppercase tracking-widest mb-2">Technologies I Work With</h2>
+          <ScrambledText
+            radius={100}
+            duration={1.2}
+            speed={0.5}
+            scrambleChars=".:"
+            className="text-center text-zinc-400 text-sm uppercase tracking-widest"
+          >
+            Technologies I Work With
+          </ScrambledText>
         </div>
         <div className="h-[80px] relative overflow-hidden">
           <LogoLoop

@@ -1,0 +1,386 @@
+Project Page - Projects & Case Studies - Decrypted Text
+usage
+import DecryptedText from './DecryptedText';
+
+{/* Example 1: Defaults (hover to decrypt) */}
+<DecryptedText text="Hover me!" />
+
+{/* Example 2: Customized speed and characters */}
+<DecryptedText
+text="Customize me"
+speed={60}
+maxIterations={10}
+characters="ABCD1234!?"
+className="revealed"
+parentClassName="all-letters"
+encryptedClassName="encrypted"
+/>
+
+{/* Example 3: Animate on view (runs once) */}
+<div style={{ marginTop: '4rem' }}>
+<DecryptedText
+  text="This text animates when in view"
+  animateOn="view"
+  revealDirection="start"
+  sequential
+  useOriginalCharsOnly={false}
+/>
+</div>
+code
+import { useEffect, useState, useRef } from 'react';
+import { motion } from 'motion/react';
+import type { HTMLMotionProps } from 'motion/react';
+
+interface DecryptedTextProps extends HTMLMotionProps<'span'> {
+  text: string;
+  speed?: number;
+  maxIterations?: number;
+  sequential?: boolean;
+  revealDirection?: 'start' | 'end' | 'center';
+  useOriginalCharsOnly?: boolean;
+  characters?: string;
+  className?: string;
+  encryptedClassName?: string;
+  parentClassName?: string;
+  animateOn?: 'view' | 'hover' | 'both';
+}
+
+export default function DecryptedText({
+  text,
+  speed = 50,
+  maxIterations = 10,
+  sequential = false,
+  revealDirection = 'start',
+  useOriginalCharsOnly = false,
+  characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+',
+  className = '',
+  parentClassName = '',
+  encryptedClassName = '',
+  animateOn = 'hover',
+  ...props
+}: DecryptedTextProps) {
+  const [displayText, setDisplayText] = useState<string>(text);
+  const [isHovering, setIsHovering] = useState<boolean>(false);
+  const [isScrambling, setIsScrambling] = useState<boolean>(false);
+  const [revealedIndices, setRevealedIndices] = useState<Set<number>>(new Set());
+  const [hasAnimated, setHasAnimated] = useState<boolean>(false);
+  const containerRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    let currentIteration = 0;
+
+    const getNextIndex = (revealedSet: Set<number>): number => {
+      const textLength = text.length;
+      switch (revealDirection) {
+        case 'start':
+          return revealedSet.size;
+        case 'end':
+          return textLength - 1 - revealedSet.size;
+        case 'center': {
+          const middle = Math.floor(textLength / 2);
+          const offset = Math.floor(revealedSet.size / 2);
+          const nextIndex = revealedSet.size % 2 === 0 ? middle + offset : middle - offset - 1;
+
+          if (nextIndex >= 0 && nextIndex < textLength && !revealedSet.has(nextIndex)) {
+            return nextIndex;
+          }
+          for (let i = 0; i < textLength; i++) {
+            if (!revealedSet.has(i)) return i;
+          }
+          return 0;
+        }
+        default:
+          return revealedSet.size;
+      }
+    };
+
+    const availableChars = useOriginalCharsOnly
+      ? Array.from(new Set(text.split(''))).filter(char => char !== ' ')
+      : characters.split('');
+
+    const shuffleText = (originalText: string, currentRevealed: Set<number>): string => {
+      if (useOriginalCharsOnly) {
+        const positions = originalText.split('').map((char, i) => ({
+          char,
+          isSpace: char === ' ',
+          index: i,
+          isRevealed: currentRevealed.has(i)
+        }));
+
+        const nonSpaceChars = positions.filter(p => !p.isSpace && !p.isRevealed).map(p => p.char);
+
+        for (let i = nonSpaceChars.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [nonSpaceChars[i], nonSpaceChars[j]] = [nonSpaceChars[j], nonSpaceChars[i]];
+        }
+
+        let charIndex = 0;
+        return positions
+          .map(p => {
+            if (p.isSpace) return ' ';
+            if (p.isRevealed) return originalText[p.index];
+            return nonSpaceChars[charIndex++];
+          })
+          .join('');
+      } else {
+        return originalText
+          .split('')
+          .map((char, i) => {
+            if (char === ' ') return ' ';
+            if (currentRevealed.has(i)) return originalText[i];
+            return availableChars[Math.floor(Math.random() * availableChars.length)];
+          })
+          .join('');
+      }
+    };
+
+    if (isHovering) {
+      setIsScrambling(true);
+      interval = setInterval(() => {
+        setRevealedIndices(prevRevealed => {
+          if (sequential) {
+            if (prevRevealed.size < text.length) {
+              const nextIndex = getNextIndex(prevRevealed);
+              const newRevealed = new Set(prevRevealed);
+              newRevealed.add(nextIndex);
+              setDisplayText(shuffleText(text, newRevealed));
+              return newRevealed;
+            } else {
+              clearInterval(interval);
+              setIsScrambling(false);
+              return prevRevealed;
+            }
+          } else {
+            setDisplayText(shuffleText(text, prevRevealed));
+            currentIteration++;
+            if (currentIteration >= maxIterations) {
+              clearInterval(interval);
+              setIsScrambling(false);
+              setDisplayText(text);
+            }
+            return prevRevealed;
+          }
+        });
+      }, speed);
+    } else {
+      setDisplayText(text);
+      setRevealedIndices(new Set());
+      setIsScrambling(false);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isHovering, text, speed, maxIterations, sequential, revealDirection, characters, useOriginalCharsOnly]);
+
+  useEffect(() => {
+    if (animateOn !== 'view' && animateOn !== 'both') return;
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setIsHovering(true);
+          setHasAnimated(true);
+        }
+      });
+    };
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const currentRef = containerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [animateOn, hasAnimated]);
+
+  const hoverProps =
+    animateOn === 'hover' || animateOn === 'both'
+      ? {
+          onMouseEnter: () => setIsHovering(true),
+          onMouseLeave: () => setIsHovering(false)
+        }
+      : {};
+
+  return (
+    <motion.span
+      ref={containerRef}
+      className={`inline-block whitespace-pre-wrap ${parentClassName}`}
+      {...hoverProps}
+      {...props}
+    >
+      <span className="sr-only">{displayText}</span>
+
+      <span aria-hidden="true">
+        {displayText.split('').map((char, index) => {
+          const isRevealedOrDone = revealedIndices.has(index) || !isScrambling || !isHovering;
+
+          return (
+            <span key={index} className={isRevealedOrDone ? className : encryptedClassName}>
+              {char}
+            </span>
+          );
+        })}
+      </span>
+    </motion.span>
+  );
+}
+projects page - Real-world systems I've built and improved - Shiny Text
+usage
+import ShinyText from './ShinyText';
+
+<ShinyText
+  text="✨ Shiny Text Effect"
+  speed={2}
+  delay={0}
+  color="#b5b5b5"
+  shineColor="#ffffff"
+  spread={120}
+  direction="left"
+  yoyo={false}
+  pauseOnHover={false}
+  disabled={false}
+/>
+code
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { motion, useMotionValue, useAnimationFrame, useTransform } from 'motion/react';
+
+interface ShinyTextProps {
+  text: string;
+  disabled?: boolean;
+  speed?: number;
+  className?: string;
+  color?: string;
+  shineColor?: string;
+  spread?: number;
+  yoyo?: boolean;
+  pauseOnHover?: boolean;
+  direction?: 'left' | 'right';
+  delay?: number;
+}
+
+const ShinyText: React.FC<ShinyTextProps> = ({
+  text,
+  disabled = false,
+  speed = 2,
+  className = '',
+  color = '#b5b5b5',
+  shineColor = '#ffffff',
+  spread = 120,
+  yoyo = false,
+  pauseOnHover = false,
+  direction = 'left',
+  delay = 0
+}) => {
+  const [isPaused, setIsPaused] = useState(false);
+  const progress = useMotionValue(0);
+  const elapsedRef = useRef(0);
+  const lastTimeRef = useRef<number | null>(null);
+  const directionRef = useRef(direction === 'left' ? 1 : -1);
+
+  const animationDuration = speed * 1000;
+  const delayDuration = delay * 1000;
+
+  useAnimationFrame(time => {
+    if (disabled || isPaused) {
+      lastTimeRef.current = null;
+      return;
+    }
+
+    if (lastTimeRef.current === null) {
+      lastTimeRef.current = time;
+      return;
+    }
+
+    const deltaTime = time - lastTimeRef.current;
+    lastTimeRef.current = time;
+
+    elapsedRef.current += deltaTime;
+
+    // Animation goes from 0 to 100
+    if (yoyo) {
+      const cycleDuration = animationDuration + delayDuration;
+      const fullCycle = cycleDuration * 2;
+      const cycleTime = elapsedRef.current % fullCycle;
+
+      if (cycleTime < animationDuration) {
+        // Forward animation: 0 -> 100
+        const p = (cycleTime / animationDuration) * 100;
+        progress.set(directionRef.current === 1 ? p : 100 - p);
+      } else if (cycleTime < cycleDuration) {
+        // Delay at end
+        progress.set(directionRef.current === 1 ? 100 : 0);
+      } else if (cycleTime < cycleDuration + animationDuration) {
+        // Reverse animation: 100 -> 0
+        const reverseTime = cycleTime - cycleDuration;
+        const p = 100 - (reverseTime / animationDuration) * 100;
+        progress.set(directionRef.current === 1 ? p : 100 - p);
+      } else {
+        // Delay at start
+        progress.set(directionRef.current === 1 ? 0 : 100);
+      }
+    } else {
+      const cycleDuration = animationDuration + delayDuration;
+      const cycleTime = elapsedRef.current % cycleDuration;
+
+      if (cycleTime < animationDuration) {
+        // Animation phase: 0 -> 100
+        const p = (cycleTime / animationDuration) * 100;
+        progress.set(directionRef.current === 1 ? p : 100 - p);
+      } else {
+        // Delay phase - hold at end (shine off-screen)
+        progress.set(directionRef.current === 1 ? 100 : 0);
+      }
+    }
+  });
+
+  useEffect(() => {
+    directionRef.current = direction === 'left' ? 1 : -1;
+    elapsedRef.current = 0;
+    progress.set(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [direction]);
+
+  // Transform: p=0 -> 150% (shine off right), p=100 -> -50% (shine off left)
+  const backgroundPosition = useTransform(progress, p => `${150 - p * 2}% center`);
+
+  const handleMouseEnter = useCallback(() => {
+    if (pauseOnHover) setIsPaused(true);
+  }, [pauseOnHover]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (pauseOnHover) setIsPaused(false);
+  }, [pauseOnHover]);
+
+  const gradientStyle: React.CSSProperties = {
+    backgroundImage: `linear-gradient(${spread}deg, ${color} 0%, ${color} 35%, ${shineColor} 50%, ${color} 65%, ${color} 100%)`,
+    backgroundSize: '200% auto',
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+    WebkitTextFillColor: 'transparent'
+  };
+
+  return (
+    <motion.span
+      className={`inline-block ${className}`}
+      style={{ ...gradientStyle, backgroundPosition }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {text}
+    </motion.span>
+  );
+};
+
+export default ShinyText;
+//   plugins: [],
+// };

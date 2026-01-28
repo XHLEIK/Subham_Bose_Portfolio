@@ -1,0 +1,1152 @@
+Beyond code Page - Photography - True Focus
+
+usage
+import TrueFocus from './TrueFocus';
+
+<TrueFocus 
+sentence="True Focus"
+manualMode={false}
+blurAmount={5}
+borderColor="#5227FF"
+animationDuration={0.5}
+pauseBetweenAnimations={1}
+/>
+code
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'motion/react';
+
+interface TrueFocusProps {
+  sentence?: string;
+  separator?: string;
+  manualMode?: boolean;
+  blurAmount?: number;
+  borderColor?: string;
+  glowColor?: string;
+  animationDuration?: number;
+  pauseBetweenAnimations?: number;
+}
+
+interface FocusRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const TrueFocus: React.FC<TrueFocusProps> = ({
+  sentence = 'True Focus',
+  separator = ' ',
+  manualMode = false,
+  blurAmount = 5,
+  borderColor = 'green',
+  glowColor = 'rgba(0, 255, 0, 0.6)',
+  animationDuration = 0.5,
+  pauseBetweenAnimations = 1
+}) => {
+  const words = sentence.split(separator);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [focusRect, setFocusRect] = useState<FocusRect>({ x: 0, y: 0, width: 0, height: 0 });
+
+  useEffect(() => {
+    if (!manualMode) {
+      const interval = setInterval(
+        () => {
+          setCurrentIndex(prev => (prev + 1) % words.length);
+        },
+        (animationDuration + pauseBetweenAnimations) * 1000
+      );
+
+      return () => clearInterval(interval);
+    }
+  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length]);
+
+  useEffect(() => {
+    if (currentIndex === null || currentIndex === -1) return;
+    if (!wordRefs.current[currentIndex] || !containerRef.current) return;
+
+    const parentRect = containerRef.current.getBoundingClientRect();
+    const activeRect = wordRefs.current[currentIndex]!.getBoundingClientRect();
+
+    setFocusRect({
+      x: activeRect.left - parentRect.left,
+      y: activeRect.top - parentRect.top,
+      width: activeRect.width,
+      height: activeRect.height
+    });
+  }, [currentIndex, words.length]);
+
+  const handleMouseEnter = (index: number) => {
+    if (manualMode) {
+      setLastActiveIndex(index);
+      setCurrentIndex(index);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (manualMode) {
+      setCurrentIndex(lastActiveIndex!);
+    }
+  };
+
+  return (
+    <div
+      className="relative flex gap-4 justify-center items-center flex-wrap"
+      ref={containerRef}
+      style={{ outline: 'none', userSelect: 'none' }}
+    >
+      {words.map((word, index) => {
+        const isActive = index === currentIndex;
+        return (
+          <span
+            key={index}
+            ref={el => {
+              wordRefs.current[index] = el;
+            }}
+            className="relative text-[3rem] font-black cursor-pointer"
+            style={
+              {
+                filter: manualMode
+                  ? isActive
+                    ? `blur(0px)`
+                    : `blur(${blurAmount}px)`
+                  : isActive
+                    ? `blur(0px)`
+                    : `blur(${blurAmount}px)`,
+                transition: `filter ${animationDuration}s ease`,
+                outline: 'none',
+                userSelect: 'none'
+              } as React.CSSProperties
+            }
+            onMouseEnter={() => handleMouseEnter(index)}
+            onMouseLeave={handleMouseLeave}
+          >
+            {word}
+          </span>
+        );
+      })}
+
+      <motion.div
+        className="absolute top-0 left-0 pointer-events-none box-border border-0"
+        animate={{
+          x: focusRect.x,
+          y: focusRect.y,
+          width: focusRect.width,
+          height: focusRect.height,
+          opacity: currentIndex >= 0 ? 1 : 0
+        }}
+        transition={{
+          duration: animationDuration
+        }}
+        style={
+          {
+            '--border-color': borderColor,
+            '--glow-color': glowColor
+          } as React.CSSProperties
+        }
+      >
+        <span
+          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] left-[-10px] border-r-0 border-b-0"
+          style={{
+            borderColor: 'var(--border-color)',
+            filter: 'drop-shadow(0 0 4px var(--border-color))'
+          }}
+        ></span>
+        <span
+          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] right-[-10px] border-l-0 border-b-0"
+          style={{
+            borderColor: 'var(--border-color)',
+            filter: 'drop-shadow(0 0 4px var(--border-color))'
+          }}
+        ></span>
+        <span
+          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] left-[-10px] border-r-0 border-t-0"
+          style={{
+            borderColor: 'var(--border-color)',
+            filter: 'drop-shadow(0 0 4px var(--border-color))'
+          }}
+        ></span>
+        <span
+          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] right-[-10px] border-l-0 border-t-0"
+          style={{
+            borderColor: 'var(--border-color)',
+            filter: 'drop-shadow(0 0 4px var(--border-color))'
+          }}
+        ></span>
+      </motion.div>
+    </div>
+  );
+};
+
+export default TrueFocus;
+
+
+
+Beyond code Page - Music & Artists - Shiny text
+
+usage
+import ShinyText from './ShinyText';
+
+<ShinyText
+  text="✨ Shiny Text Effect"
+  speed={2}
+  delay={0}
+  color="#b5b5b5"
+  shineColor="#ffffff"
+  spread={120}
+  direction="left"
+  yoyo={false}
+  pauseOnHover={false}
+  disabled={false}
+/>
+code
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { motion, useMotionValue, useAnimationFrame, useTransform } from 'motion/react';
+
+interface ShinyTextProps {
+  text: string;
+  disabled?: boolean;
+  speed?: number;
+  className?: string;
+  color?: string;
+  shineColor?: string;
+  spread?: number;
+  yoyo?: boolean;
+  pauseOnHover?: boolean;
+  direction?: 'left' | 'right';
+  delay?: number;
+}
+
+const ShinyText: React.FC<ShinyTextProps> = ({
+  text,
+  disabled = false,
+  speed = 2,
+  className = '',
+  color = '#b5b5b5',
+  shineColor = '#ffffff',
+  spread = 120,
+  yoyo = false,
+  pauseOnHover = false,
+  direction = 'left',
+  delay = 0
+}) => {
+  const [isPaused, setIsPaused] = useState(false);
+  const progress = useMotionValue(0);
+  const elapsedRef = useRef(0);
+  const lastTimeRef = useRef<number | null>(null);
+  const directionRef = useRef(direction === 'left' ? 1 : -1);
+
+  const animationDuration = speed * 1000;
+  const delayDuration = delay * 1000;
+
+  useAnimationFrame(time => {
+    if (disabled || isPaused) {
+      lastTimeRef.current = null;
+      return;
+    }
+
+    if (lastTimeRef.current === null) {
+      lastTimeRef.current = time;
+      return;
+    }
+
+    const deltaTime = time - lastTimeRef.current;
+    lastTimeRef.current = time;
+
+    elapsedRef.current += deltaTime;
+
+    // Animation goes from 0 to 100
+    if (yoyo) {
+      const cycleDuration = animationDuration + delayDuration;
+      const fullCycle = cycleDuration * 2;
+      const cycleTime = elapsedRef.current % fullCycle;
+
+      if (cycleTime < animationDuration) {
+        // Forward animation: 0 -> 100
+        const p = (cycleTime / animationDuration) * 100;
+        progress.set(directionRef.current === 1 ? p : 100 - p);
+      } else if (cycleTime < cycleDuration) {
+        // Delay at end
+        progress.set(directionRef.current === 1 ? 100 : 0);
+      } else if (cycleTime < cycleDuration + animationDuration) {
+        // Reverse animation: 100 -> 0
+        const reverseTime = cycleTime - cycleDuration;
+        const p = 100 - (reverseTime / animationDuration) * 100;
+        progress.set(directionRef.current === 1 ? p : 100 - p);
+      } else {
+        // Delay at start
+        progress.set(directionRef.current === 1 ? 0 : 100);
+      }
+    } else {
+      const cycleDuration = animationDuration + delayDuration;
+      const cycleTime = elapsedRef.current % cycleDuration;
+
+      if (cycleTime < animationDuration) {
+        // Animation phase: 0 -> 100
+        const p = (cycleTime / animationDuration) * 100;
+        progress.set(directionRef.current === 1 ? p : 100 - p);
+      } else {
+        // Delay phase - hold at end (shine off-screen)
+        progress.set(directionRef.current === 1 ? 100 : 0);
+      }
+    }
+  });
+
+  useEffect(() => {
+    directionRef.current = direction === 'left' ? 1 : -1;
+    elapsedRef.current = 0;
+    progress.set(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [direction]);
+
+  // Transform: p=0 -> 150% (shine off right), p=100 -> -50% (shine off left)
+  const backgroundPosition = useTransform(progress, p => `${150 - p * 2}% center`);
+
+  const handleMouseEnter = useCallback(() => {
+    if (pauseOnHover) setIsPaused(true);
+  }, [pauseOnHover]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (pauseOnHover) setIsPaused(false);
+  }, [pauseOnHover]);
+
+  const gradientStyle: React.CSSProperties = {
+    backgroundImage: `linear-gradient(${spread}deg, ${color} 0%, ${color} 35%, ${shineColor} 50%, ${color} 65%, ${color} 100%)`,
+    backgroundSize: '200% auto',
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+    WebkitTextFillColor: 'transparent'
+  };
+
+  return (
+    <motion.span
+      className={`inline-block ${className}`}
+      style={{ ...gradientStyle, backgroundPosition }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {text}
+    </motion.span>
+  );
+};
+
+export default ShinyText;
+//   plugins: [],
+// };
+
+beyond code page - Gaming Zone - Shuffle
+usage
+import Shuffle from './Shuffle';
+
+<Shuffle
+  text="Hello World"
+  shuffleDirection="right"
+  duration={0.35}
+  animationMode="evenodd"
+  shuffleTimes={1}
+  ease="power3.out"
+  stagger={0.03}
+  threshold={0.1}
+  triggerOnce={true}
+  triggerOnHover
+  respectReducedMotion={true}
+  loop={false}
+  loopDelay={0}
+/>
+code
+import React, { useRef, useEffect, useState, useMemo } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText as GSAPSplitText } from 'gsap/SplitText';
+import { useGSAP } from '@gsap/react';
+import { JSX } from 'react';
+
+gsap.registerPlugin(ScrollTrigger, GSAPSplitText);
+
+export interface ShuffleProps {
+  text: string;
+  className?: string;
+  style?: React.CSSProperties;
+  shuffleDirection?: 'left' | 'right' | 'up' | 'down';
+  duration?: number;
+  maxDelay?: number;
+  ease?: string | ((t: number) => number);
+  threshold?: number;
+  rootMargin?: string;
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+  textAlign?: React.CSSProperties['textAlign'];
+  onShuffleComplete?: () => void;
+  shuffleTimes?: number;
+  animationMode?: 'random' | 'evenodd';
+  loop?: boolean;
+  loopDelay?: number;
+  stagger?: number;
+  scrambleCharset?: string;
+  colorFrom?: string;
+  colorTo?: string;
+  triggerOnce?: boolean;
+  respectReducedMotion?: boolean;
+  triggerOnHover?: boolean;
+}
+
+const Shuffle: React.FC<ShuffleProps> = ({
+  text,
+  className = '',
+  style = {},
+  shuffleDirection = 'right',
+  duration = 0.35,
+  maxDelay = 0,
+  ease = 'power3.out',
+  threshold = 0.1,
+  rootMargin = '-100px',
+  tag = 'p',
+  textAlign = 'center',
+  onShuffleComplete,
+  shuffleTimes = 1,
+  animationMode = 'evenodd',
+  loop = false,
+  loopDelay = 0,
+  stagger = 0.03,
+  scrambleCharset = '',
+  colorFrom,
+  colorTo,
+  triggerOnce = true,
+  respectReducedMotion = true,
+  triggerOnHover = true
+}) => {
+  const ref = useRef<HTMLElement>(null);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  const splitRef = useRef<GSAPSplitText | null>(null);
+  const wrappersRef = useRef<HTMLElement[]>([]);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const playingRef = useRef(false);
+  const hoverHandlerRef = useRef<((e: Event) => void) | null>(null);
+
+  useEffect(() => {
+    if ('fonts' in document) {
+      if (document.fonts.status === 'loaded') setFontsLoaded(true);
+      else document.fonts.ready.then(() => setFontsLoaded(true));
+    } else setFontsLoaded(true);
+  }, []);
+
+  const scrollTriggerStart = useMemo(() => {
+    const startPct = (1 - threshold) * 100;
+    const mm = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin || '');
+    const mv = mm ? parseFloat(mm[1]) : 0;
+    const mu = mm ? mm[2] || 'px' : 'px';
+    const sign = mv === 0 ? '' : mv < 0 ? `-=${Math.abs(mv)}${mu}` : `+=${mv}${mu}`;
+    return `top ${startPct}%${sign}`;
+  }, [threshold, rootMargin]);
+
+  useGSAP(
+    () => {
+      if (!ref.current || !text || !fontsLoaded) return;
+      if (respectReducedMotion && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        onShuffleComplete?.();
+        return;
+      }
+
+      const el = ref.current as HTMLElement;
+      const start = scrollTriggerStart;
+
+      const removeHover = () => {
+        if (hoverHandlerRef.current && ref.current) {
+          ref.current.removeEventListener('mouseenter', hoverHandlerRef.current);
+          hoverHandlerRef.current = null;
+        }
+      };
+
+      const teardown = () => {
+        if (tlRef.current) {
+          tlRef.current.kill();
+          tlRef.current = null;
+        }
+        if (wrappersRef.current.length) {
+          wrappersRef.current.forEach(wrap => {
+            const inner = wrap.firstElementChild as HTMLElement | null;
+            const orig = inner?.querySelector('[data-orig="1"]') as HTMLElement | null;
+            if (orig && wrap.parentNode) wrap.parentNode.replaceChild(orig, wrap);
+          });
+          wrappersRef.current = [];
+        }
+        try {
+          splitRef.current?.revert();
+        } catch {}
+        splitRef.current = null;
+        playingRef.current = false;
+      };
+
+      const build = () => {
+        teardown();
+
+        const computedFont = getComputedStyle(el).fontFamily;
+
+        splitRef.current = new GSAPSplitText(el, {
+          type: 'chars',
+          charsClass: 'shuffle-char',
+          wordsClass: 'shuffle-word',
+          linesClass: 'shuffle-line',
+          smartWrap: true,
+          reduceWhiteSpace: false
+        });
+
+        const chars = (splitRef.current.chars || []) as HTMLElement[];
+        wrappersRef.current = [];
+
+        const rolls = Math.max(1, Math.floor(shuffleTimes));
+        const rand = (set: string) => set.charAt(Math.floor(Math.random() * set.length)) || '';
+
+        chars.forEach(ch => {
+          const parent = ch.parentElement;
+          if (!parent) return;
+
+          const w = ch.getBoundingClientRect().width;
+          const h = ch.getBoundingClientRect().height;
+          if (!w) return;
+
+          const wrap = document.createElement('span');
+          wrap.className = 'inline-block overflow-hidden text-left';
+          Object.assign(wrap.style, {
+            width: w + 'px',
+            height: shuffleDirection === 'up' || shuffleDirection === 'down' ? h + 'px' : 'auto',
+            verticalAlign: 'bottom'
+          });
+
+          const inner = document.createElement('span');
+          inner.className =
+            'inline-block will-change-transform origin-left transform-gpu ' +
+            (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'whitespace-normal' : 'whitespace-nowrap');
+
+          parent.insertBefore(wrap, ch);
+          wrap.appendChild(inner);
+
+          const firstOrig = ch.cloneNode(true) as HTMLElement;
+          firstOrig.className =
+            'text-left ' + (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'block' : 'inline-block');
+          Object.assign(firstOrig.style, { width: w + 'px', fontFamily: computedFont });
+
+          ch.setAttribute('data-orig', '1');
+          ch.className =
+            'text-left ' + (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'block' : 'inline-block');
+          Object.assign(ch.style, { width: w + 'px', fontFamily: computedFont });
+
+          inner.appendChild(firstOrig);
+          for (let k = 0; k < rolls; k++) {
+            const c = ch.cloneNode(true) as HTMLElement;
+            if (scrambleCharset) c.textContent = rand(scrambleCharset);
+            c.className =
+              'text-left ' + (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'block' : 'inline-block');
+            Object.assign(c.style, { width: w + 'px', fontFamily: computedFont });
+            inner.appendChild(c);
+          }
+          inner.appendChild(ch);
+
+          const steps = rolls + 1;
+
+          if (shuffleDirection === 'right' || shuffleDirection === 'down') {
+            const firstCopy = inner.firstElementChild as HTMLElement | null;
+            const real = inner.lastElementChild as HTMLElement | null;
+            if (real) inner.insertBefore(real, inner.firstChild);
+            if (firstCopy) inner.appendChild(firstCopy);
+          }
+
+          let startX = 0;
+          let finalX = 0;
+          let startY = 0;
+          let finalY = 0;
+
+          if (shuffleDirection === 'right') {
+            startX = -steps * w;
+            finalX = 0;
+          } else if (shuffleDirection === 'left') {
+            startX = 0;
+            finalX = -steps * w;
+          } else if (shuffleDirection === 'down') {
+            startY = -steps * h;
+            finalY = 0;
+          } else if (shuffleDirection === 'up') {
+            startY = 0;
+            finalY = -steps * h;
+          }
+
+          if (shuffleDirection === 'left' || shuffleDirection === 'right') {
+            gsap.set(inner, { x: startX, y: 0, force3D: true });
+            inner.setAttribute('data-start-x', String(startX));
+            inner.setAttribute('data-final-x', String(finalX));
+          } else {
+            gsap.set(inner, { x: 0, y: startY, force3D: true });
+            inner.setAttribute('data-start-y', String(startY));
+            inner.setAttribute('data-final-y', String(finalY));
+          }
+
+          if (colorFrom) (inner.style as any).color = colorFrom;
+          wrappersRef.current.push(wrap);
+        });
+      };
+
+      const inners = () => wrappersRef.current.map(w => w.firstElementChild as HTMLElement);
+
+      const randomizeScrambles = () => {
+        if (!scrambleCharset) return;
+        wrappersRef.current.forEach(w => {
+          const strip = w.firstElementChild as HTMLElement;
+          if (!strip) return;
+          const kids = Array.from(strip.children) as HTMLElement[];
+          for (let i = 1; i < kids.length - 1; i++) {
+            kids[i].textContent = scrambleCharset.charAt(Math.floor(Math.random() * scrambleCharset.length));
+          }
+        });
+      };
+
+      const cleanupToStill = () => {
+        wrappersRef.current.forEach(w => {
+          const strip = w.firstElementChild as HTMLElement;
+          if (!strip) return;
+          const real = strip.querySelector('[data-orig="1"]') as HTMLElement | null;
+          if (!real) return;
+          strip.replaceChildren(real);
+          strip.style.transform = 'none';
+          strip.style.willChange = 'auto';
+        });
+      };
+
+      const play = () => {
+        const strips = inners();
+        if (!strips.length) return;
+
+        playingRef.current = true;
+        const isVertical = shuffleDirection === 'up' || shuffleDirection === 'down';
+
+        const tl = gsap.timeline({
+          smoothChildTiming: true,
+          repeat: loop ? -1 : 0,
+          repeatDelay: loop ? loopDelay : 0,
+          onRepeat: () => {
+            if (scrambleCharset) randomizeScrambles();
+            if (isVertical) {
+              gsap.set(strips, { y: (i, t: HTMLElement) => parseFloat(t.getAttribute('data-start-y') || '0') });
+            } else {
+              gsap.set(strips, { x: (i, t: HTMLElement) => parseFloat(t.getAttribute('data-start-x') || '0') });
+            }
+            onShuffleComplete?.();
+          },
+          onComplete: () => {
+            playingRef.current = false;
+            if (!loop) {
+              cleanupToStill();
+              if (colorTo) gsap.set(strips, { color: colorTo });
+              onShuffleComplete?.();
+              armHover();
+            }
+          }
+        });
+
+        const addTween = (targets: HTMLElement[], at: number) => {
+          const vars: any = {
+            duration,
+            ease,
+            force3D: true,
+            stagger: animationMode === 'evenodd' ? stagger : 0
+          };
+          if (isVertical) {
+            vars.y = (i: number, t: HTMLElement) => parseFloat(t.getAttribute('data-final-y') || '0');
+          } else {
+            vars.x = (i: number, t: HTMLElement) => parseFloat(t.getAttribute('data-final-x') || '0');
+          }
+
+          tl.to(targets, vars, at);
+
+          if (colorFrom && colorTo) tl.to(targets, { color: colorTo, duration, ease }, at);
+        };
+
+        if (animationMode === 'evenodd') {
+          const odd = strips.filter((_, i) => i % 2 === 1);
+          const even = strips.filter((_, i) => i % 2 === 0);
+          const oddTotal = duration + Math.max(0, odd.length - 1) * stagger;
+          const evenStart = odd.length ? oddTotal * 0.7 : 0;
+          if (odd.length) addTween(odd, 0);
+          if (even.length) addTween(even, evenStart);
+        } else {
+          strips.forEach(strip => {
+            const d = Math.random() * maxDelay;
+            const vars: any = {
+              duration,
+              ease,
+              force3D: true
+            };
+            if (isVertical) {
+              vars.y = parseFloat(strip.getAttribute('data-final-y') || '0');
+            } else {
+              vars.x = parseFloat(strip.getAttribute('data-final-x') || '0');
+            }
+            tl.to(strip, vars, d);
+            if (colorFrom && colorTo) tl.fromTo(strip, { color: colorFrom }, { color: colorTo, duration, ease }, d);
+          });
+        }
+
+        tlRef.current = tl;
+      };
+
+      const armHover = () => {
+        if (!triggerOnHover || !ref.current) return;
+        removeHover();
+        const handler = () => {
+          if (playingRef.current) return;
+          build();
+          if (scrambleCharset) randomizeScrambles();
+          play();
+        };
+        hoverHandlerRef.current = handler;
+        ref.current.addEventListener('mouseenter', handler);
+      };
+
+      const create = () => {
+        build();
+        if (scrambleCharset) randomizeScrambles();
+        play();
+        armHover();
+        setReady(true);
+      };
+
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start,
+        once: triggerOnce,
+        onEnter: create
+      });
+
+      return () => {
+        st.kill();
+        removeHover();
+        teardown();
+        setReady(false);
+      };
+    },
+    {
+      dependencies: [
+        text,
+        duration,
+        maxDelay,
+        ease,
+        scrollTriggerStart,
+        fontsLoaded,
+        shuffleDirection,
+        shuffleTimes,
+        animationMode,
+        loop,
+        loopDelay,
+        stagger,
+        scrambleCharset,
+        colorFrom,
+        colorTo,
+        triggerOnce,
+        respectReducedMotion,
+        triggerOnHover,
+        onShuffleComplete
+      ],
+      scope: ref
+    }
+  );
+
+  const baseTw = 'inline-block whitespace-normal break-words will-change-transform uppercase text-2xl leading-none';
+  const userHasFont = useMemo(() => className && /font[-[]/i.test(className), [className]);
+
+  const fallbackFont = useMemo(
+    () => (userHasFont ? {} : { fontFamily: `'Press Start 2P', sans-serif` }),
+    [userHasFont]
+  );
+
+  const commonStyle = useMemo(
+    () => ({
+      textAlign,
+      ...fallbackFont,
+      ...style
+    }),
+    [textAlign, fallbackFont, style]
+  );
+
+  const classes = useMemo(
+    () => `${baseTw} ${ready ? 'visible' : 'invisible'} ${className}`.trim(),
+    [baseTw, ready, className]
+  );
+  const Tag = (tag || 'p') as keyof JSX.IntrinsicElements;
+
+  return React.createElement(Tag, { ref: ref as any, className: classes, style: commonStyle }, text);
+};
+
+export default Shuffle;
+beyond code page - Cooking Corner - Variable Proximity
+usage
+import { useRef } from 'react';
+import VariableProximity from './VariableProximity';
+
+const containerRef = useRef(null);
+
+<div
+ref={containerRef}
+style={{position: 'relative'}}
+>
+  <VariableProximity
+    label={'Hover me! And then star React Bits on GitHub, or else...'}
+    className={'variable-proximity-demo'}
+    fromFontVariationSettings="'wght' 400, 'opsz' 9"
+    toFontVariationSettings="'wght' 1000, 'opsz' 40"
+    containerRef={containerRef}
+    radius={160}
+    falloff='linear'
+    falloff="linear"
+/>
+</div>
+code
+import { forwardRef, useMemo, useRef, useEffect, MutableRefObject, CSSProperties, HTMLAttributes } from 'react';
+import { motion } from 'motion/react';
+
+function useAnimationFrame(callback: () => void) {
+  useEffect(() => {
+    let frameId: number;
+    const loop = () => {
+      callback();
+      frameId = requestAnimationFrame(loop);
+    };
+    frameId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(frameId);
+  }, [callback]);
+}
+
+function useMousePositionRef(containerRef: MutableRefObject<HTMLElement | null>) {
+  const positionRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const updatePosition = (x: number, y: number) => {
+      if (containerRef?.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        positionRef.current = { x: x - rect.left, y: y - rect.top };
+      } else {
+        positionRef.current = { x, y };
+      }
+    };
+
+    const handleMouseMove = (ev: MouseEvent) => updatePosition(ev.clientX, ev.clientY);
+    const handleTouchMove = (ev: TouchEvent) => {
+      const touch = ev.touches[0];
+      updatePosition(touch.clientX, touch.clientY);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [containerRef]);
+
+  return positionRef;
+}
+
+interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> {
+  label: string;
+  fromFontVariationSettings: string;
+  toFontVariationSettings: string;
+  containerRef: MutableRefObject<HTMLElement | null>;
+  radius?: number;
+  falloff?: 'linear' | 'exponential' | 'gaussian';
+  className?: string;
+  onClick?: () => void;
+  style?: CSSProperties;
+}
+
+const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((props, ref) => {
+  const {
+    label,
+    fromFontVariationSettings,
+    toFontVariationSettings,
+    containerRef,
+    radius = 50,
+    falloff = 'linear',
+    className = '',
+    onClick,
+    style,
+    ...restProps
+  } = props;
+
+  const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const interpolatedSettingsRef = useRef<string[]>([]);
+  const mousePositionRef = useMousePositionRef(containerRef);
+  const lastPositionRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
+
+  const parsedSettings = useMemo(() => {
+    const parseSettings = (settingsStr: string) =>
+      new Map(
+        settingsStr
+          .split(',')
+          .map(s => s.trim())
+          .map(s => {
+            const [name, value] = s.split(' ');
+            return [name.replace(/['"]/g, ''), parseFloat(value)];
+          })
+      );
+
+    const fromSettings = parseSettings(fromFontVariationSettings);
+    const toSettings = parseSettings(toFontVariationSettings);
+
+    return Array.from(fromSettings.entries()).map(([axis, fromValue]) => ({
+      axis,
+      fromValue,
+      toValue: toSettings.get(axis) ?? fromValue
+    }));
+  }, [fromFontVariationSettings, toFontVariationSettings]);
+
+  const calculateDistance = (x1: number, y1: number, x2: number, y2: number) =>
+    Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+
+  const calculateFalloff = (distance: number) => {
+    const norm = Math.min(Math.max(1 - distance / radius, 0), 1);
+    switch (falloff) {
+      case 'exponential':
+        return norm ** 2;
+      case 'gaussian':
+        return Math.exp(-((distance / (radius / 2)) ** 2) / 2);
+      case 'linear':
+      default:
+        return norm;
+    }
+  };
+
+  useAnimationFrame(() => {
+    if (!containerRef?.current) return;
+    const { x, y } = mousePositionRef.current;
+    if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) {
+      return;
+    }
+    lastPositionRef.current = { x, y };
+    const containerRect = containerRef.current.getBoundingClientRect();
+
+    letterRefs.current.forEach((letterRef, index) => {
+      if (!letterRef) return;
+
+      const rect = letterRef.getBoundingClientRect();
+      const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
+      const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
+
+      const distance = calculateDistance(
+        mousePositionRef.current.x,
+        mousePositionRef.current.y,
+        letterCenterX,
+        letterCenterY
+      );
+
+      if (distance >= radius) {
+        letterRef.style.fontVariationSettings = fromFontVariationSettings;
+        return;
+      }
+
+      const falloffValue = calculateFalloff(distance);
+      const newSettings = parsedSettings
+        .map(({ axis, fromValue, toValue }) => {
+          const interpolatedValue = fromValue + (toValue - fromValue) * falloffValue;
+          return `'${axis}' ${interpolatedValue}`;
+        })
+        .join(', ');
+
+      interpolatedSettingsRef.current[index] = newSettings;
+      letterRef.style.fontVariationSettings = newSettings;
+    });
+  });
+
+  const words = label.split(' ');
+  let letterIndex = 0;
+
+  return (
+    <span
+      ref={ref}
+      onClick={onClick}
+      style={{
+        display: 'inline',
+        fontFamily: '"Roboto Flex", sans-serif',
+        ...style
+      }}
+      className={className}
+      {...restProps}
+    >
+      {words.map((word, wordIndex) => (
+        <span key={wordIndex} className="inline-block whitespace-nowrap">
+          {word.split('').map(letter => {
+            const currentLetterIndex = letterIndex++;
+            return (
+              <motion.span
+                key={currentLetterIndex}
+                ref={el => {
+                  letterRefs.current[currentLetterIndex] = el;
+                }}
+                style={{
+                  display: 'inline-block',
+                  fontVariationSettings: interpolatedSettingsRef.current[currentLetterIndex]
+                }}
+                aria-hidden="true"
+              >
+                {letter}
+              </motion.span>
+            );
+          })}
+          {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
+        </span>
+      ))}
+      <span className="sr-only">{label}</span>
+    </span>
+  );
+});
+
+VariableProximity.displayName = 'VariableProximity';
+export default VariableProximity;
+beyond code page - Coding is what I do.
+Creativity is how I live.
+Here’s a small peek into the things that keep me inspired beyond the screen.,I like freezing moments before they disappear.
+Mostly random streets, good light, and accidentally good shots.,My debugging soundtrack.
+Bollywood when I’m emotional, hip-hop when the code refuses to work.,Stress relief, reflex training, and occasional rage therapy.
+Mobile or PC — if it’s competitive, I’m in.,I don’t just compile code, I cook food too.
+Experiments happen. Some succeed. Some… don’t get repeated. - Blur Text
+usage
+import BlurText from "./BlurText";
+
+const handleAnimationComplete = () => {
+  console.log('Animation completed!');
+};
+
+<BlurText
+  text="Isn't this so cool?!"
+  delay={200}
+  animateBy="words"
+  direction="top"
+  onAnimationComplete={handleAnimationComplete}
+  className="text-2xl mb-8"
+/>
+code
+import { motion, Transition, Easing } from 'motion/react';
+import { useEffect, useRef, useState, useMemo } from 'react';
+
+type BlurTextProps = {
+  text?: string;
+  delay?: number;
+  className?: string;
+  animateBy?: 'words' | 'letters';
+  direction?: 'top' | 'bottom';
+  threshold?: number;
+  rootMargin?: string;
+  animationFrom?: Record<string, string | number>;
+  animationTo?: Array<Record<string, string | number>>;
+  easing?: Easing | Easing[];
+  onAnimationComplete?: () => void;
+  stepDuration?: number;
+};
+
+const buildKeyframes = (
+  from: Record<string, string | number>,
+  steps: Array<Record<string, string | number>>
+): Record<string, Array<string | number>> => {
+  const keys = new Set<string>([...Object.keys(from), ...steps.flatMap(s => Object.keys(s))]);
+
+  const keyframes: Record<string, Array<string | number>> = {};
+  keys.forEach(k => {
+    keyframes[k] = [from[k], ...steps.map(s => s[k])];
+  });
+  return keyframes;
+};
+
+const BlurText: React.FC<BlurTextProps> = ({
+  text = '',
+  delay = 200,
+  className = '',
+  animateBy = 'words',
+  direction = 'top',
+  threshold = 0.1,
+  rootMargin = '0px',
+  animationFrom,
+  animationTo,
+  easing = (t: number) => t,
+  onAnimationComplete,
+  stepDuration = 0.35
+}) => {
+  const elements = animateBy === 'words' ? text.split(' ') : text.split('');
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.unobserve(ref.current as Element);
+        }
+      },
+      { threshold, rootMargin }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold, rootMargin]);
+
+  const defaultFrom = useMemo(
+    () =>
+      direction === 'top' ? { filter: 'blur(10px)', opacity: 0, y: -50 } : { filter: 'blur(10px)', opacity: 0, y: 50 },
+    [direction]
+  );
+
+  const defaultTo = useMemo(
+    () => [
+      {
+        filter: 'blur(5px)',
+        opacity: 0.5,
+        y: direction === 'top' ? 5 : -5
+      },
+      { filter: 'blur(0px)', opacity: 1, y: 0 }
+    ],
+    [direction]
+  );
+
+  const fromSnapshot = animationFrom ?? defaultFrom;
+  const toSnapshots = animationTo ?? defaultTo;
+
+  const stepCount = toSnapshots.length + 1;
+  const totalDuration = stepDuration * (stepCount - 1);
+  const times = Array.from({ length: stepCount }, (_, i) => (stepCount === 1 ? 0 : i / (stepCount - 1)));
+
+  return (
+    <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
+      {elements.map((segment, index) => {
+        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
+
+        const spanTransition: Transition = {
+          duration: totalDuration,
+          times,
+          delay: (index * delay) / 1000,
+          ease: easing
+        };
+
+        return (
+          <motion.span
+            key={index}
+            initial={fromSnapshot}
+            animate={inView ? animateKeyframes : fromSnapshot}
+            transition={spanTransition}
+            onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
+            style={{
+              display: 'inline-block',
+              willChange: 'transform, filter, opacity'
+            }}
+          >
+            {segment === ' ' ? '\u00A0' : segment}
+            {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
+          </motion.span>
+        );
+      })}
+    </p>
+  );
+};
+
+export default BlurText;
+
+
