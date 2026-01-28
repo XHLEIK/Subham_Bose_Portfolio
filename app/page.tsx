@@ -9,18 +9,18 @@ import GlassSurface from "@/components/GlassSurface";
 import TextType from "@/components/TextType";
 import RotatingText from "@/components/RotatingText";
 import ScrambledText from "@/components/ScrambledText";
-import { 
-  SiReact, 
-  SiNextdotjs, 
-  SiTypescript, 
-  SiTailwindcss, 
-  SiNodedotjs, 
-  SiPython, 
-  SiDocker, 
+import {
+  SiReact,
+  SiNextdotjs,
+  SiTypescript,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiPython,
+  SiDocker,
   SiGit,
   SiPostgresql,
   SiMongodb
-} from 'react-icons/si';
+} from "react-icons/si";
 
 const techLogos = [
   { node: <SiReact className="text-cyan-400" />, title: "React", href: "https://react.dev" },
@@ -32,19 +32,25 @@ const techLogos = [
   { node: <SiDocker className="text-blue-400" />, title: "Docker", href: "https://docker.com" },
   { node: <SiGit className="text-orange-500" />, title: "Git", href: "https://git-scm.com" },
   { node: <SiPostgresql className="text-blue-300" />, title: "PostgreSQL", href: "https://postgresql.org" },
-  { node: <SiMongodb className="text-green-400" />, title: "MongoDB", href: "https://mongodb.com" },
+  { node: <SiMongodb className="text-green-400" />, title: "MongoDB", href: "https://mongodb.com" }
 ];
 
 export default function Home() {
   const router = useRouter();
 
+  // tiny bump to nudge the hero slightly up (reduces top empty space)
+  const NAV_HEIGHT_PX = 1;
+
   return (
-    <div className="min-h-[300vh] pt-16">
-      {/* Hero Section with TextPressure */}
-      <section className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full">
+    <div className="min-h-[300vh] pt-0">
+      {/* Hero Section with TextPressure — centered within viewport minus nav height */}
+      <section
+        className="relative z-10 flex flex-col items-center justify-center w-full"
+        style={{ minHeight: `calc(100vh - ${NAV_HEIGHT_PX}px)` }}
+      >
         <main className="flex flex-col items-center justify-center w-full max-w-5xl px-6">
-          {/* Welcome Text */}
-          <div className="relative w-full h-[200px] md:h-[300px]">
+          {/* Welcome Text - removed fixed height so flex centering is exact */}
+          <div className="relative w-full">
             <TextPressure
               text="Greetings"
               flex={true}
@@ -72,7 +78,7 @@ export default function Home() {
           </div>
         </main>
       </section>
-      
+
       {/* ScrollFloat Section */}
       <section className="relative z-10 flex flex-col items-center justify-center min-h-[50vh] w-full px-6">
         <ScrollFloat
@@ -86,7 +92,7 @@ export default function Home() {
           Welcome to my portfolio
         </ScrollFloat>
       </section>
-      
+
       {/* Profile Section */}
       <section className="relative z-10 flex items-center justify-center min-h-screen w-full px-6 py-20">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20 max-w-6xl w-full">
@@ -106,7 +112,7 @@ export default function Home() {
               onContactClick={() => router.push("/contact")}
             />
           </div>
-          
+
           {/* Bio Text */}
           <div className="flex flex-col gap-6 text-center lg:text-left max-w-xl">
             <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
@@ -136,33 +142,33 @@ export default function Home() {
               />
             </div>
             <div className="flex flex-wrap gap-3 justify-center lg:justify-start mt-4">
-              <GlassSurface 
-                width="auto" 
-                height={40} 
+              <GlassSurface
+                width="auto"
+                height={40}
                 borderRadius={20}
                 className="px-4 text-sm text-zinc-300 hover:scale-105 transition-transform"
               >
                 React
               </GlassSurface>
-              <GlassSurface 
-                width="auto" 
-                height={40} 
+              <GlassSurface
+                width="auto"
+                height={40}
                 borderRadius={20}
                 className="px-4 text-sm text-zinc-300 hover:scale-105 transition-transform"
               >
                 Node.js
               </GlassSurface>
-              <GlassSurface 
-                width="auto" 
-                height={40} 
+              <GlassSurface
+                width="auto"
+                height={40}
                 borderRadius={20}
                 className="px-4 text-sm text-zinc-300 hover:scale-105 transition-transform"
               >
                 TypeScript
               </GlassSurface>
-              <GlassSurface 
-                width="auto" 
-                height={40} 
+              <GlassSurface
+                width="auto"
+                height={40}
                 borderRadius={20}
                 className="px-4 text-sm text-zinc-300 hover:scale-105 transition-transform"
               >
@@ -172,7 +178,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
       {/* Tech Stack Logo Loop */}
       <section className="relative z-10 w-full py-16">
         <div className="max-w-6xl mx-auto px-6 mb-8">
