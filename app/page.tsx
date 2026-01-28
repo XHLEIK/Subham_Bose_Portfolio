@@ -117,7 +117,7 @@ export default function Home() {
                 showCursor
                 cursorCharacter="_"
                 cursorBlinkDuration={0.5}
-                loop={false}
+                loop={true}
                 className="inline"
               />
             </div>
