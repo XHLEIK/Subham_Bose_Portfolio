@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { FaCamera, FaHeart, FaMusic, FaGamepad, FaMobileAlt, FaDesktop, FaUtensils } from "react-icons/fa";
 import { GiCookingPot } from "react-icons/gi";
@@ -8,6 +8,12 @@ import DomeGallery from "@/components/DomeGallery";
 import TiltedCard from "@/components/TiltedCard";
 import ChromaGrid, { ChromaItem } from "@/components/ChromaGrid";
 import Carousel, { CarouselItem } from "@/components/Carousel";
+import GradientText from "@/components/GradientText";
+import TrueFocus from "@/components/TrueFocus";
+import ShinyText from "@/components/ShinyText";
+import Shuffle from "@/components/Shuffle";
+import VariableProximity from "@/components/VariableProximity";
+import BlurText from "@/components/BlurText";
 
 // Cooking dishes data
 const cookingDishes: CarouselItem[] = [
@@ -190,6 +196,8 @@ const fadeInUp = {
 };
 
 export default function BeyondCodePage() {
+  const cookingContainerRef = useRef<HTMLDivElement>(null);
+  
   return (
     <div className="min-h-screen pt-24 pb-20 overflow-x-hidden">
       {/* Hero Section */}
@@ -200,16 +208,23 @@ export default function BeyondCodePage() {
           transition={{ duration: 0.6 }}
           className="max-w-4xl"
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Beyond{" "}
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              Code
-            </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <GradientText
+              colors={["#a855f7", "#ec4899", "#a855f7"]}
+              animationSpeed={4}
+              className="font-bold"
+            >
+              Beyond Code
+            </GradientText>
           </h1>
-          <p className="text-lg md:text-xl text-zinc-400 leading-relaxed max-w-2xl">Coding is what I do.
-Creativity is how I live.
-Here’s a small peek into the things that keep me inspired beyond the screen.
-          </p>
+          <div className="text-lg md:text-xl text-zinc-400 leading-relaxed max-w-2xl">
+            <BlurText
+              text="Coding is what I do. Creativity is how I live. Here's a small peek into the things that keep me inspired beyond the screen."
+              delay={50}
+              animateBy="words"
+              className="leading-relaxed"
+            />
+          </div>
         </motion.div>
       </section>
 
@@ -226,13 +241,27 @@ Here’s a small peek into the things that keep me inspired beyond the screen.
             </div>
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-white">
-                Photography
+                <TrueFocus
+                  sentence="Photography Moments"
+                  manualMode={false}
+                  blurAmount={5}
+                  borderColor="#a855f7"
+                  glowColor="rgba(168, 85, 247, 0.6)"
+                  animationDuration={0.5}
+                  pauseBetweenAnimations={1}
+                />
               </h2>
               <p className="text-zinc-500 text-sm">Capturing moments through my lens</p>
             </div>
           </div>
-          <p className="text-zinc-400 max-w-2xl leading-relaxed">I like freezing moments before they disappear.
-Mostly random streets, good light, and accidentally good shots.</p>
+          <div className="text-zinc-400 max-w-2xl leading-relaxed">
+            <BlurText
+              text="I like freezing moments before they disappear. Mostly random streets, good light, and accidentally good shots."
+              delay={50}
+              animateBy="words"
+              className="leading-relaxed"
+            />
+          </div>
         </motion.div>
 
         {/* DomeGallery Container */}
@@ -289,13 +318,25 @@ Mostly random streets, good light, and accidentally good shots.</p>
             </div>
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-white">
-                Music & Artists
+                <ShinyText
+                  text="Music & Artists"
+                  speed={3}
+                  color="#ffffff"
+                  shineColor="#22c55e"
+                  className="font-bold"
+                />
               </h2>
               <p className="text-zinc-500 text-sm">The soundtrack to my coding sessions</p>
             </div>
           </div>
-          <p className="text-zinc-400 max-w-2xl leading-relaxed">My debugging soundtrack.
-Bollywood when I’m emotional, hip-hop when the code refuses to work.</p>
+          <div className="text-zinc-400 max-w-2xl leading-relaxed">
+            <BlurText
+              text="My debugging soundtrack. Bollywood when I'm emotional, hip-hop when the code refuses to work."
+              delay={50}
+              animateBy="words"
+              className="leading-relaxed"
+            />
+          </div>
         </motion.div>
 
         {/* 3 Rows of 5 Artists */}
@@ -340,17 +381,39 @@ Bollywood when I’m emotional, hip-hop when the code refuses to work.</p>
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="text-center mb-12"
+          className="text-left px-6 md:px-12 lg:px-20 mb-12"
         >
-          <div className="inline-flex items-center gap-3 mb-4">
-            <FaGamepad className="text-3xl text-green-400" />
+          <div className="flex items-center gap-3 mb-4">
+<div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center">
+  <FaGamepad className="text-3xl text-green-400" />
+</div>
+
             <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Gaming <span className="text-green-400">Zone</span>
+              <Shuffle
+                text="Gaming Zone"
+                shuffleDirection="right"
+                duration={0.35}
+                animationMode="evenodd"
+                shuffleTimes={1}
+                ease="power3.out"
+                stagger={0.03}
+                threshold={0.1}
+                triggerOnce={true}
+                triggerOnHover
+                tag="span"
+                textAlign="left"
+                className="text-3xl md:text-4xl font-bold text-green-400"
+              />
             </h2>
-            <FaGamepad className="text-3xl text-green-400" />
           </div>
-          <p className="text-zinc-400 max-w-2xl mx-auto">Stress relief, reflex training, and occasional rage therapy.
-Mobile or PC — if it’s competitive, I’m in.</p>
+          <div className="text-zinc-400 max-w-2xl">
+            <BlurText
+              text="Stress relief, reflex training, and occasional rage therapy. Mobile or PC — if it's competitive, I'm in."
+              delay={50}
+              animateBy="words"
+              className="leading-relaxed"
+            />
+          </div>
         </motion.div>
 
         {/* Mobile Games */}
@@ -407,17 +470,35 @@ Mobile or PC — if it’s competitive, I’m in.</p>
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="text-center mb-12"
+          className="text-left mb-12"
+          ref={cookingContainerRef}
         >
-          <div className="inline-flex items-center gap-3 mb-4">
-            <FaUtensils className="text-3xl text-orange-400" />
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Cooking <span className="text-orange-400">Corner</span>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center">
+  <FaUtensils className="text-3xl text-orange-400" />
+</div>
+
+            <h2 className="text-3xl md:text-4xl font-bold text-white relative" style={{ position: 'relative' }}>
+              <VariableProximity
+                label="Cooking Corner"
+                className="text-3xl md:text-4xl font-bold text-orange-400"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 900, 'opsz' 40"
+                containerRef={cookingContainerRef}
+                radius={150}
+                falloff="linear"
+              />
             </h2>
-            <GiCookingPot className="text-3xl text-orange-400" />
+            {/* <GiCookingPot className="text-3xl text-orange-400" /> */}
           </div>
-          <p className="text-zinc-400 max-w-2xl mx-auto">When I'm not coding, you'll find me in the kitchen experimenting with flavors.
-Some dishes turn out great. Some… don't get repeated.</p>
+          <div className="text-zinc-400 max-w-2xl">
+            <BlurText
+              text="I don't just compile code, I cook food too. Experiments happen. Some succeed. Some… don't get repeated."
+              delay={50}
+              animateBy="words"
+              className="leading-relaxed"
+            />
+          </div>
         </motion.div>
 
         <motion.div

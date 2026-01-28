@@ -7,6 +7,9 @@ import { SiJavascript, SiTypescript, SiReact, SiNodedotjs, SiMongodb, SiExpress 
 import FlowingMenu from "@/components/FlowingMenu";
 import PixelCard from "@/components/PixelCard";
 import GlassSurface from "@/components/GlassSurface";
+import ShinyText from "@/components/ShinyText";
+import GradientText from "@/components/GradientText";
+import BlurText from "@/components/BlurText";
 
 const fullTimeExperience = [
   {
@@ -186,20 +189,30 @@ export default function AboutPage() {
         >
           {/* About Me Header */}
           <motion.div variants={itemVariants} className="mb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-              About <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">Me</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+              <GradientText
+                colors={["#a855f7", "#ec4899", "#a855f7"]}
+                animationSpeed={4}
+                className="font-bold"
+              >
+                About Me
+              </GradientText>
             </h1>
-            <div className="h-1 w-24 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+            {/* <div className="h-1 w-24 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div> */}
           </motion.div>
 
           {/* Professional Bio */}
           <motion.div variants={itemVariants} className="mb-12">
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8">
-              <p className="text-lg md:text-xl text-zinc-300 leading-relaxed mb-4">
-                Hi there! I'm <span className="text-white font-semibold">Subham Bose</span>, an aspiring 
-                <span className="text-purple-400 font-medium"> Software Engineer</span> with a passion for 
-                building scalable web applications and backend systems.
-              </p>
+              <div className="text-lg md:text-xl leading-relaxed mb-4">
+                <ShinyText
+                  text="Hi there! I'm Subham Bose, an aspiring Software Engineer with a passion for building scalable web applications and backend systems."
+                  speed={3}
+                  color="#d4d4d8"
+                  shineColor="#a855f7"
+                  className="leading-relaxed"
+                />
+              </div>
               <p className="text-zinc-400 leading-relaxed mb-4">
                 With hands-on experience in the MERN stack and a strong foundation in system design, 
                 I love turning complex problems into elegant, efficient solutions. My journey in tech 
@@ -232,7 +245,7 @@ export default function AboutPage() {
           {/* What I Do - FlowingMenu */}
           <motion.div variants={itemVariants} className="mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
-              What I Do
+              <BlurText text="What I Do" delay={50} animateBy="words" className="inline-block" />
             </h2>
             <div className="h-[400px] md:h-[450px] relative">
               <FlowingMenu
@@ -250,7 +263,7 @@ export default function AboutPage() {
           {/* Tech Stack */}
           <motion.div variants={itemVariants} className="mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
-              Tech Stack
+              <BlurText text="Tech Stack" delay={50} animateBy="words" className="inline-block" />
             </h2>
             <div className="flex flex-wrap gap-3">
               {techStack.map((tech, index) => (
@@ -277,8 +290,8 @@ export default function AboutPage() {
           {/* Career Goals Section */}
           <motion.div variants={itemVariants} className="mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
-              <FaRocket className="text-cyan-400" />
-              What I&apos;m Looking For
+              {/* <FaRocket className="text-cyan-400" /> */}
+              <BlurText text="What I'm Looking For" delay={50} animateBy="words" className="inline-block" />
             </h2>
             <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-6 md:p-8">
               <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
@@ -307,7 +320,7 @@ export default function AboutPage() {
           <motion.div variants={itemVariants} className="mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
               <FaUsers className="text-pink-400" />
-              Soft Skills
+              <BlurText text="Soft Skills" delay={50} animateBy="words" className="inline-block" />
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:border-purple-500/50 transition-all duration-300">
@@ -364,7 +377,7 @@ export default function AboutPage() {
           <motion.div variants={itemVariants} className="mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 flex items-center gap-3">
               <FaGraduationCap className="text-purple-400" />
-              Education
+              <BlurText text="Education" delay={50} animateBy="words" className="inline-block" />
             </h2>
             
             <div className="flex flex-col gap-6">
@@ -440,7 +453,7 @@ export default function AboutPage() {
           <motion.div variants={itemVariants} className="mb-16">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 flex items-center gap-3">
               <FaBriefcase className="text-pink-400" />
-              Work Experience
+              <BlurText text="Work Experience" delay={50} animateBy="words" className="inline-block" />
             </h2>
 
             {/* Full-Time Experience */}
@@ -626,7 +639,7 @@ export default function AboutPage() {
           <motion.div variants={itemVariants}>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
               <FaMapMarkerAlt className="text-pink-500" />
-              My Location
+              <BlurText text="My Location" delay={50} animateBy="words" className="inline-block" />
             </h2>
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
               {/* Map Container */}

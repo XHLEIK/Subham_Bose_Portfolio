@@ -17,6 +17,8 @@ import {
 import SpotlightCard from "@/components/SpotlightCard";
 import PixelCard from "@/components/PixelCard";
 import TextPressure from "@/components/TextPressure";
+import ScrambledText from "@/components/ScrambledText";
+import GradientText from "@/components/GradientText";
 
 // Social links data
 const socialLinks = [
@@ -207,10 +209,17 @@ export default function ContactPage() {
           </div>
           
 
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-            Have a project in mind or just want to say hello? I&apos;d love to hear from you.
-            Drop me a message and let&apos;s create something amazing together!
-          </p>
+          <div className="text-zinc-400 text-lg max-w-12xl mx-auto leading-relaxed mb-8">
+            <ScrambledText
+              radius={100}
+              duration={1.2}
+              speed={0.5}
+              scrambleChars=".:"
+              className="text-zinc-400 text-lg leading-relaxed"
+            >
+              Have a project in mind or just want to say hello? I'd love to hear from you. Drop me a message and let's create something amazing together!
+            </ScrambledText>
+          </div>
 
           {/* Download CV Button */}
           <motion.a
@@ -234,8 +243,14 @@ export default function ContactPage() {
           animate="visible"
           className="text-center mb-10"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-            Find Me <span className="text-violet-400">Online</span>
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            <GradientText
+              colors={["#8b5cf6", "#a855f7", "#c084fc", "#8b5cf6"]}
+              animationSpeed={4}
+              className="text-2xl md:text-3xl font-bold"
+            >
+              Find Me Online
+            </GradientText>
           </h2>
           <p className="text-zinc-500">Connect with me on your preferred platform</p>
         </motion.div>

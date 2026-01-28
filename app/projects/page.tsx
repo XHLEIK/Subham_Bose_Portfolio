@@ -7,6 +7,8 @@ import { SiPython, SiNodedotjs, SiMongodb, SiExpress, SiReact, SiSupabase, SiTyp
 import SpotlightCard from "@/components/SpotlightCard";
 import ElectricBorder from "@/components/ElectricBorder";
 import GlassSurface from "@/components/GlassSurface";
+import DecryptedText from "@/components/DecryptedText";
+import ShinyText from "@/components/ShinyText";
 
 type ProjectType = "solo" | "group";
 type ProjectCategory = "ai" | "backend" | "fullstack";
@@ -170,10 +172,24 @@ export default function ProjectsPage() {
         {/* Page Header */}
         <motion.div variants={itemVariants} className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-            Projects & Case Studies
+            <DecryptedText
+              text="Projects & Case Studies"
+              animateOn="view"
+              revealDirection="start"
+              sequential
+              speed={50}
+              maxIterations={10}
+              className="text-white"
+            />
           </h1>
-          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
-            Real-world systems I&apos;ve built and improved
+          <p className="text-lg md:text-xl max-w-2xl mx-auto">
+            <ShinyText
+              text="Real-world systems I've built and improved"
+              speed={3}
+              color="#a1a1aa"
+              shineColor="#a855f7"
+              className=""
+            />
           </p>
         </motion.div>
 
