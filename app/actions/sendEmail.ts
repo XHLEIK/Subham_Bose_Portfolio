@@ -2,8 +2,6 @@
 
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export const sendEmail = async (formData: FormData) => {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
@@ -12,6 +10,15 @@ export const sendEmail = async (formData: FormData) => {
   if (!name || !email || !message) {
     return { error: "Missing required fields" };
   }
+
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.error("RESEND_API_KEY is missing in environment variables.");
+    return { error: "Server configuration error. Please try again later." };
+  }
+
+  const resend = new Resend(apiKey);
 
   try {
     const { data, error } = await resend.emails.send({
