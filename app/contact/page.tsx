@@ -20,6 +20,8 @@ import TextPressure from "@/components/TextPressure";
 import ScrambledText from "@/components/ScrambledText";
 import GradientText from "@/components/GradientText";
 
+import { sendEmail } from "@/app/actions/sendEmail";
+
 // Social links data
 const socialLinks = [
   {
@@ -166,15 +168,22 @@ export default function ContactPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("message", formData.message);
+
+    const result = await sendEmail(formDataToSend);
 
     setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: "", email: "", message: "" });
 
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+    if (result.success) {
+      setIsSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } else {
+      alert("Failed to send message: " + result.error);
+    }
   };
 
   const handleChange = (

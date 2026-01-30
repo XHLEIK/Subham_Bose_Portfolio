@@ -266,8 +266,8 @@ export default function BeyondCodePage() {
             overlayBlurColor="transparent"
             imageBorderRadius="16px"
             openedImageBorderRadius="20px"
-            openedImageWidth="500px"
-            openedImageHeight="500px"
+            openedImageWidth="min(90vw, 500px)"
+            openedImageHeight="min(90vw, 500px)"
           />
         </motion.div>
 
@@ -470,8 +470,8 @@ export default function BeyondCodePage() {
               <VariableProximity
                 label="Cooking Corner"
                 className="text-3xl md:text-4xl font-bold text-orange-400"
-                fromFontVariationSettings="'wght' 400, 'opsz' 9"
-                toFontVariationSettings="'wght' 900, 'opsz' 40"
+                fromFontVariationSettings="'wght' 400"
+                toFontVariationSettings="'wght' 900"
                 containerRef={cookingContainerRef}
                 radius={150}
                 falloff="linear"
