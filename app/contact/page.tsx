@@ -206,11 +206,14 @@ export default function ContactPage() {
           <div className="absolute top-10 left-1/4 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute top-20 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="h-24 md:h-40 mb-10">
+          <div className="h-30 md:h-40 mb-10">
             <TextPressure
               text="Get In Touch"
-              fontFamily="Poppins"
-              weight={true}
+              flex
+              alpha={false}
+              stroke={false}
+              italic
+              weight={false}
               textColor="#ffffff"
               width={true}
               minFontSize={36}
